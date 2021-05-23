@@ -4,21 +4,26 @@ class Mutation:
         self.ingredients = ingredients
         self.chance = chance
 
+
 class Pigment:
     def __init__(self, name):
         self.name = name
         self.mutations = []
+
 
 class Path:
     def __init__(self, target, left, right):
         self.target = target
         self.left = left
         self.right = right
+
     def __str__(self):
         if self.left is None and self.right is None:
             return ""
         else:
-            return str(self.left) + str(self.right) + self.target + " = " + self.right.target + " + " + self.left.target + "\n"
+            return str(self.left) + str(
+                self.right) + self.target + " = " + self.right.target + " + " + self.left.target + "\n"
+
 
 def get_pigments():
     pigments = {}
@@ -35,11 +40,13 @@ def get_pigments():
             pigments[splice[2].strip()].mutations.append(mut)
     return pigments
 
+
 def get_target():
     target = None
     print("select the target pigment:")
     target = input().strip()
     return target
+
 
 def get_collection():
     collection = []
@@ -48,6 +55,7 @@ def get_collection():
     collection = [l.strip() for l in input_string.split(',')]
     return collection
 
+
 def get_combinations(collection):
     combinations = []
     for first_ingredient in collection:
@@ -55,6 +63,7 @@ def get_combinations(collection):
             if not first_ingredient == second_ingredient:
                 combinations.append((first_ingredient, second_ingredient))
     return combinations
+
 
 def get_possible_results(pigments, combinations, target):
     results = []
@@ -67,6 +76,7 @@ def get_possible_results(pigments, combinations, target):
                     else:
                         results.append(pigment.name)
     return list(set(results))
+
 
 def find_path(collection, target, pigments):
     tiers = [collection]
@@ -85,7 +95,8 @@ def find_path(collection, target, pigments):
         found = target in results
         unobtainable = len(tiers_flattened) == len(list(set([j for sub in tiers for j in sub])))
     if path_to_target is None and not unobtainable:
-        path_to_target = Path(target, find_path(collection, results[1], pigments), find_path(collection, results[2], pigments))
+        path_to_target = Path(target, find_path(collection, results[1], pigments),
+                              find_path(collection, results[2], pigments))
     if unobtainable:
         print("target pigment is unobtainable with the provided pigments.")
     return path_to_target
@@ -101,6 +112,7 @@ def main():
         print(path)
     print("press any key to continue.")
     finish = input()
+
 
 if __name__ == "__main__":
     main()
