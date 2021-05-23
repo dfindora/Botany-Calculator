@@ -24,6 +24,24 @@ class Path:
             return str(self.left) + str(
                 self.right) + self.target + " = " + self.right.target + " + " + self.left.target + "\n"
 
+    def to_list(self):
+        if self.left is None and self.right is None:
+            return None
+        else:
+            res = []
+            left_list = self.left.to_list()
+            if left_list is not None:
+                left_list = [i for i in left_list if not None]
+                res.extend(left_list)
+
+            right_list = self.right.to_list()
+            if right_list is not None:
+                right_list = [i for i in right_list if not None]
+                res.extend(right_list)
+
+            res.append((self.right.target, self.left.target, self.target))
+            return res
+
 
 def get_pigments():
     pigments = {}
@@ -41,19 +59,12 @@ def get_pigments():
     return pigments
 
 
-def get_target():
-    target = None
-    print("select the target pigment:")
-    target = input().strip()
-    return target
-
-
-def get_collection():
-    collection = []
-    print("select the pigments you have, separated by commas:")
-    input_string = input().strip()
-    collection = [l.strip() for l in input_string.split(',')]
-    return collection
+# converts regex into Title Case.
+def title_case(match_obj):
+    result = ""
+    for elem in match_obj.groups():
+        result += elem[0].upper() + elem[1:] + " "
+    return result[:-1]
 
 
 def get_combinations(collection):
@@ -100,19 +111,3 @@ def find_path(collection, target, pigments):
     if unobtainable:
         print("target pigment is unobtainable with the provided pigments.")
     return path_to_target
-
-
-def main():
-    pigments = get_pigments()
-    target = get_target()
-    collection = get_collection()
-    path = find_path(collection, target, pigments)
-
-    if path is not None:
-        print(path)
-    print("press any key to continue.")
-    finish = input()
-
-
-if __name__ == "__main__":
-    main()
